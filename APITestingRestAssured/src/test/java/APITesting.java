@@ -4,20 +4,26 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 
 import static org.hamcrest.Matchers.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.testng.Assert;
 
-import Files.Paylaod;
 import Files.ReUsableMethod;
 
-public class APITesting {
+import java.io.IOException;
 
-	public static void main(String[] args) {
+
+
+
+public class APITesting  {
+
+	public static void main(String[] args) throws IOException{
 
 
 		RestAssured.baseURI= "https://rahulshettyacademy.com";
 		String response=given().log().all().queryParam("key","qaclick123").header("Content-Type","application/json")
-		.body(Paylaod.AddPlace()).when().post("/maps/api/place/add/json")
+		.body(new String(Files.readAllBytes(Paths.get("E:\\AddPlace.json")))).when().post("/maps/api/place/add/json")
 		.then().assertThat().statusCode(200).body("scope", equalTo("APP"))
 		.header("server", "Apache/2.4.18 (Ubuntu)").extract().response().asString();
 		System.out.println(response);
